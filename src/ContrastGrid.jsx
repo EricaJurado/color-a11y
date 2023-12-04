@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import { isContrastCompliant } from "./colorutils";
 
 const createColorGrid = (backgroundColors, textColors) => {
   let colorGrid = [];
@@ -9,6 +10,7 @@ const createColorGrid = (backgroundColors, textColors) => {
       row.push({
         backgroundColor: backgroundColor,
         textColor: textColor,
+        isContrastCompliant: isContrastCompliant(backgroundColor, textColor),
       });
     });
     colorGrid.push(row);
@@ -24,6 +26,7 @@ const ContrastGrid = ({ colors }) => {
     console.log(colors);
     setColorGrid(createColorGrid(colors, colors));
   }, [colors]);
+
   return (
     <div>
       {colorGrid.map((row, rowIndex) => (
@@ -37,7 +40,7 @@ const ContrastGrid = ({ colors }) => {
                 color: color.textColor,
               }}
             >
-              Aa
+              {color.isContrastCompliant ? "✓" : "✕"}
             </div>
           ))}
         </div>

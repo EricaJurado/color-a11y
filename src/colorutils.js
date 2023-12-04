@@ -2,7 +2,8 @@
  * Checks if the contrast between two colors is compliant with WCAG standards.
  * @param {string} bgColor - The background color
  * @param {string} txtColor - The text color
- * @returns {boolean} - Returns true if the contrast ratio is greater than or equal to 4.5 meaning it's WCAG compliant. Otherwise, returns false.
+ * @returns {boolean} - Returns true if the contrast ratio is greater than or
+ *        equal to 4.5 meaning it's WCAG compliant. Otherwise, returns false.
  */
 const isContrastCompliant = (bgColor, txtColor) => {
   const contrastRatio = getContrastRatio(bgColor, txtColor);
@@ -73,9 +74,24 @@ const getRelativeLuminance = (color) => {
   return 0.2126 * R + 0.7152 * G + 0.0722 * B;
 };
 
+/**
+ * Returns color of item (text/icon/etc) that should be visible on
+ * the given background color
+ * @param {string} backgroundColor - Background color in hex
+ * @returns {string} Black or white hex color
+ */
+const getItemColorForBackground = (backgroundColor) => {
+  const threshold = 128;
+  const [r, g, b] = hexToRgb(backgroundColor);
+  const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
+  const itemColor = luminance > threshold ? "#000000" : "#ffffff";
+  return itemColor;
+};
+
 export {
   isContrastCompliant,
   getContrastRatio,
   hexToRgb,
   getRelativeLuminance,
+  getItemColorForBackground,
 };

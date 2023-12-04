@@ -4,7 +4,7 @@ import ContrastGrid from "./ContrastGrid";
 import "./App.scss";
 
 function App() {
-  const [colors, setColors] = useState([]);
+  const [colors, setColors] = useState(["#FFFFFF"]);
   return (
     <div className="App">
       <h1>Color A11y</h1>

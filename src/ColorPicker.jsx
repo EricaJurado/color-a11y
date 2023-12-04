@@ -1,10 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ChromePicker } from "react-color";
-import { hexToRgb } from "./colorutils";
+import { getItemColorForBackground } from "./colorutils";
 
+import DeleteIcon from "@mui/icons-material/Delete";
+
+/**
+ * ColorPicker component for selecting and managing colors.
+ *
+ * @component
+ * @param {string[]} props.colors - Array of colors
+ * @param {function} props.setColors - Function to update colors array
+ * @returns {JSX.Element} The ColorPicker component.
+ */
 const ColorPicker = ({ colors, setColors }) => {
   const [color, setColor] = useState("#ffffff");
   const [currColorIndex, setCurrColorIndex] = useState(0);
+
+  useEffect(() => {
+    if (currColorIndex >= colors.length) {
+      setCurrColorIndex(0);
+      setColor(colors[0]);
+    }
+  }, [colors, currColorIndex]);
 
   const handleColorChange = (newColor) => {
     setColor(newColor.hex);
@@ -18,17 +35,23 @@ const ColorPicker = ({ colors, setColors }) => {
     setCurrColorIndex(colors.length);
   };
 
+  const handleRemoveColor = (index) => {
+    let colorsCopy = [...colors];
+    colorsCopy.splice(index, 1);
+
+    if (index >= colorsCopy.length - 2) {
+      setCurrColorIndex(0);
+      setColor(colorsCopy[0]);
+      setColors(colorsCopy);
+    } else {
+      setColor(colorsCopy[index]);
+      setColors(colorsCopy);
+    }
+  };
+
   const handleClearColors = () => {
     setColors([]);
     setCurrColorIndex(0);
-  };
-
-  const getTextColorForBackground = (backgroundColor) => {
-    const threshold = 128;
-    const [r, g, b] = hexToRgb(backgroundColor);
-    const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
-    const labelTextColor = luminance > threshold ? "#000000" : "#ffffff";
-    return labelTextColor;
   };
 
   return (
@@ -56,11 +79,17 @@ const ColorPicker = ({ colors, setColors }) => {
                 <span
                   className="color-swatch-text"
                   style={{
-                    color: getTextColorForBackground(color),
+                    color: getItemColorForBackground(color),
                   }}
                 >
                   {color}
                 </span>
+                <DeleteIcon
+                  onClick={() => handleRemoveColor(index)}
+                  style={{
+                    color: getItemColorForBackground(color),
+                  }}
+                />
               </div>
             ))}
             <button onClick={handleAddColor}>Add</button>
