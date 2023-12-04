@@ -1,0 +1,19 @@
+.App {
+  text-align: center;
+}
+
+#color-picker {
+  display: flex;
+  flex-direction: row;;
+
+  #color-list {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .color-swatch {
+    width: 100%;
+    flex-grow: 1;
+  }
+}
