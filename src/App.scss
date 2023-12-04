@@ -17,3 +17,14 @@
     flex-grow: 1;
   }
 }
+
+.color-row {
+  display: flex;
+}
+
+.color-swatch {
+  flex-grow: 1;
+  height: 100px;
+  border: 1px solid black;
+  margin: 5px;
+}
