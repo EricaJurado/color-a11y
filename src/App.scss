@@ -4,7 +4,7 @@
 
 #color-picker {
   display: flex;
-  flex-direction: row;;
+  flex-direction: row;
 
   #color-list {
     flex-grow: 1;
@@ -15,6 +15,12 @@
   .color-swatch {
     width: 100%;
     flex-grow: 1;
+    border: none;
+  }
+
+  .color-swatch.selected {
+    border: 5px solid black;
+    height: 100px;
   }
 }
 
@@ -22,9 +28,11 @@
   display: flex;
 }
 
-.color-swatch {
-  flex-grow: 1;
-  height: 100px;
-  border: 1px solid black;
-  margin: 5px;
+#contrast-grid {
+  .color-swatch {
+    flex-grow: 1;
+    height: 100px;
+    border: 1px solid black;
+    margin: 5px;
+  }
 }

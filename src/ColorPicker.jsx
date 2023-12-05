@@ -70,7 +70,11 @@ const ColorPicker = ({ colors, setColors }) => {
             {colors.map((color, index) => (
               <div
                 key={index}
-                className="color-swatch"
+                className={
+                  index === currColorIndex
+                    ? "color-swatch selected"
+                    : "color-swatch"
+                }
                 style={{
                   backgroundColor: color,
                 }}

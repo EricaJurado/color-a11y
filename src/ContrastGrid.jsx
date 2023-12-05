@@ -28,7 +28,7 @@ const ContrastGrid = ({ colors }) => {
   }, [colors]);
 
   return (
-    <div>
+    <div id="contrast-grid">
       {colorGrid.map((row, rowIndex) => (
         <div key={rowIndex} className="color-row">
           {row.map((color, colIndex) => (
