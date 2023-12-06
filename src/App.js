@@ -13,16 +13,20 @@ function App() {
     },
   ]);
   return (
-    <div className="App">
-      <h1>Color A11y</h1>
-      <ColorPicker
-        colors={colors}
-        setColors={setColors}
-        idx={idx}
-        setIdx={setIdx}
-      />
-      <ContrastGrid colors={colors} />
-    </div>
+    <>
+      <header>
+        <h1>Color A11y</h1>
+      </header>
+      <main>
+        <ColorPicker
+          colors={colors}
+          setColors={setColors}
+          idx={idx}
+          setIdx={setIdx}
+        />
+        <ContrastGrid colors={colors} />
+      </main>
+    </>
   );
 }
 

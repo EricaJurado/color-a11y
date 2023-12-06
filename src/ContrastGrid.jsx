@@ -33,8 +33,20 @@ const ContrastGrid = ({ colors }) => {
 
   return (
     <div id="contrast-grid">
+      {/* horizontal label */}
+      <div className="color-row hex-label-row">
+        <div className="hex-label"></div> {/* Empty cell for top-left corner */}
+        {colors.map((color, index) => (
+          <div key={index} className="hex-label">
+            {color.color}
+          </div>
+        ))}
+      </div>
+
       {colorGrid.map((row, rowIndex) => (
         <div key={rowIndex} className="color-row">
+          {/* vertical label */}
+          <div className="hex-label">{colors[rowIndex].color}</div>
           {row.map((color, colIndex) => (
             <div
               key={colIndex}
