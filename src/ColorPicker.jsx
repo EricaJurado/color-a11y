@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { ChromePicker } from "react-color";
 import { getItemColorForBackground } from "./colorutils";
+import { getColorName } from "./colorname";
+import PropTypes from "prop-types";
 
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -10,11 +12,14 @@ import DeleteIcon from "@mui/icons-material/Delete";
  * @component
  * @param {string[]} props.colors - Array of colors
  * @param {function} props.setColors - Function to update colors array
+ * @param {number} props.idx - Last index id
+ * @param {function} props.setIdx - Function to update last index id
  * @returns {JSX.Element} The ColorPicker component.
  */
-const ColorPicker = ({ colors, setColors }) => {
+const ColorPicker = ({ colors, setColors, idx, setIdx }) => {
   const [color, setColor] = useState("#ffffff");
   const [currColorIndex, setCurrColorIndex] = useState(0);
+  const [currColorName, setCurrColorName] = useState("White");
 
   useEffect(() => {
     if (currColorIndex >= colors.length) {
@@ -23,15 +28,34 @@ const ColorPicker = ({ colors, setColors }) => {
     }
   }, [colors, currColorIndex]);
 
-  const handleColorChange = (newColor) => {
+  const handleColorChange = async (newColor) => {
     setColor(newColor.hex);
     let colorsCopy = [...colors];
-    colorsCopy[currColorIndex] = newColor.hex;
-    setColors(colorsCopy);
+
+    try {
+      const colorName = await getColorName(newColor.hex);
+      setCurrColorName(colorName);
+      colorsCopy[currColorIndex] = {
+        color: newColor.hex,
+        id: colors[currColorIndex].id,
+        colorname: colorName,
+      };
+      setColors(colorsCopy);
+    } catch (error) {
+      console.error("Error getting color name:", error);
+    }
   };
 
   const handleAddColor = () => {
-    setColors([...colors, color]);
+    setColors([
+      ...colors,
+      {
+        color: color,
+        id: idx + 1,
+        colorname: currColorName,
+      },
+    ]);
+    setIdx(idx + 1);
     setCurrColorIndex(colors.length);
   };
 
@@ -69,29 +93,29 @@ const ColorPicker = ({ colors, setColors }) => {
           <div id="color-list">
             {colors.map((color, index) => (
               <div
-                key={index}
+                key={color.id}
                 className={
                   index === currColorIndex
                     ? "color-swatch selected"
                     : "color-swatch"
                 }
                 style={{
-                  backgroundColor: color,
+                  backgroundColor: color.color,
                 }}
                 onClick={() => setCurrColorIndex(index)}
               >
                 <span
                   className="color-swatch-text"
                   style={{
-                    color: getItemColorForBackground(color),
+                    color: getItemColorForBackground(color.color),
                   }}
                 >
-                  {color}
+                  {color.color} {color.colorname}
                 </span>
                 <DeleteIcon
                   onClick={() => handleRemoveColor(index)}
                   style={{
-                    color: getItemColorForBackground(color),
+                    color: getItemColorForBackground(color.color),
                   }}
                 />
               </div>
@@ -102,6 +126,19 @@ const ColorPicker = ({ colors, setColors }) => {
       </div>
     </>
   );
+};
+
+ColorPicker.propTypes = {
+  colors: PropTypes.arrayOf(
+    PropTypes.shape({
+      color: PropTypes.string.isRequired,
+      id: PropTypes.number.isRequired,
+      colorname: PropTypes.string,
+    })
+  ).isRequired,
+  setColors: PropTypes.func.isRequired,
+  idx: PropTypes.number.isRequired,
+  setIdx: PropTypes.func.isRequired,
 };
 
 export default ColorPicker;

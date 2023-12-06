@@ -18,6 +18,11 @@
     border: none;
   }
 
+  .color-swatch:hover {
+    border: 5px dashed black;
+    height: 100px;
+  }
+
   .color-swatch.selected {
     border: 5px solid black;
     height: 100px;

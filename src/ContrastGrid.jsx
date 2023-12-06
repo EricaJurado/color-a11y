@@ -8,9 +8,14 @@ const createColorGrid = (backgroundColors, textColors) => {
     let row = [];
     textColors.forEach((textColor) => {
       row.push({
-        backgroundColor: backgroundColor,
-        textColor: textColor,
-        isContrastCompliant: isContrastCompliant(backgroundColor, textColor),
+        backgroundColor: backgroundColor.color,
+        textColor: textColor.color,
+        backgroundName: backgroundColor.name,
+        textName: textColor.name,
+        isContrastCompliant: isContrastCompliant(
+          backgroundColor.color,
+          textColor.color
+        ),
       });
     });
     colorGrid.push(row);
@@ -23,7 +28,6 @@ const ContrastGrid = ({ colors }) => {
   const [colorGrid, setColorGrid] = useState(createColorGrid(colors, colors));
 
   useEffect(() => {
-    console.log(colors);
     setColorGrid(createColorGrid(colors, colors));
   }, [colors]);
 
@@ -50,7 +54,13 @@ const ContrastGrid = ({ colors }) => {
 };
 
 ContrastGrid.propTypes = {
-  colors: PropTypes.arrayOf(PropTypes.string).isRequired,
+  colors: PropTypes.arrayOf(
+    PropTypes.shape({
+      color: PropTypes.string.isRequired,
+      id: PropTypes.number.isRequired,
+      colorname: PropTypes.string,
+    })
+  ).isRequired,
 };
 
 export default ContrastGrid;
